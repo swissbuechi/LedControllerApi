@@ -21,12 +21,9 @@ jobs:
       run: docker tag ledcontrollerapi docker.pkg.github.com/swissbuechi/ledcontrollerapi/ledcontrollerapi:latest
       
     - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
+      uses: swissbuechi/LedControllerApi@master
       with:
         name: myDocker/repository
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         tags: "latest"
-
-    - name: Publish the Docker image
-      run: docker push docker.pkg.github.com/swissbuechi/ledcontrollerapi/ledcontrollerapi:latest
