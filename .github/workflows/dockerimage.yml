@@ -15,4 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . -t ledcontrollerapi && docker push docker.pkg.github.com/swissbuechi/LedControllerApi:latest
+      run: docker build . -t ledcontrollerapi
+      
+    - uses: actions/checkout@v2
+    - name: Publish the Docker image
+      run: docker push docker.pkg.github.com/swissbuechi/LedControllerApi/ledcontrollerapi:latest
