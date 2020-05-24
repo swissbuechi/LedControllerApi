@@ -25,7 +25,6 @@ public class ImageController {
     private static final Logger LOGGER = LogManager.getLogger(ImageController.class);
     private static SerialPort port;
     private static OutputStream stream;
-
     @Autowired
     private ComPort comPort;
     @Autowired
@@ -43,6 +42,7 @@ public class ImageController {
 
     @PostMapping("/image")
     public ResponseEntity<String> imageToLed(@RequestBody ImageForm imageForm) {
+        imageForm.matrix = new Integer[]{16, 16};
         try {
             if (imageForm.reset) {
                 port = comPort.open(CustomComPort);
@@ -53,7 +53,7 @@ public class ImageController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
             // Es wird überprüft ob kein Bild zur darstellung angegeben wurde
-            if (imageForm.inputFile.equals("null")) {
+            if (imageForm.inputFile == null) {
                 LOGGER.error("No input image file provided: Displaying sample image");
                 //Schreibt das Sample Image auf den seriellen Port
                 imageForm.inputFile = "img/img.png";
@@ -84,39 +84,38 @@ public class ImageController {
             if (imageForm.rotate != null) image = imageTransformation.rotate(image, imageForm.rotate);
 
             // Das Bild wird gespeichert
-            if (!imageForm.saveFile.equals("null")) saveImage.save(image, imageForm.saveFile);
+            if (imageForm.saveFile != null) saveImage.save(image, imageForm.saveFile);
 
-            if (stream != null) {
-                // Wenn das Auto-Scaling deaktiviert werden soll
-                if (imageForm.disableAutoscale) {
-                    LOGGER.info("Autoscaling disabled");
-                }
-                // Autoscaling aktiv
-                if (image.getWidth() > panelWidth || image.getHeight() > panelHeight && !imageForm.disableAutoscale) {
-                    Dimension matrixDimension = new Dimension(imageForm.scale[0], imageForm.scale[1]);
-                    image = imageTransformation.getScaledImage(image, matrixDimension);
-                    LOGGER.error("Image is to big to be displayed on the " + panelWidth + "x" + panelHeight + " matrix");
-                    LOGGER.error("Autoscaling image down to: " + panelWidth + "x" + panelHeight);
-                }
-                // Die Grösse der Matrix
-                if (panelHeight != 16 && panelWidth != 16) {
-                    LOGGER.info("LED matrix size set to " + Arrays.toString(imageForm.matrix));
-                }
-
-                // Die Helligkeit der LEDs
-                if (imageForm.brightness == null) {
-                    imageForm.brightness = 0.1d;
-                }
-
-                LOGGER.info("LED brightness level " + imageForm.brightness);
-                String grbString = imageToRGB.imageToString(image, imageForm.brightness, panelWidth, panelHeight);
-                // Das Bild wird auf den seriellen Port geschrieben
-                port = comPort.open(CustomComPort);
-                stream = port.getOutputStream();
-                comPort.write(stream, grbString.getBytes());
-                stream.close();
-                comPort.close(port);
+            // Wenn das Auto-Scaling deaktiviert werden soll
+            if (imageForm.disableAutoscale) {
+                LOGGER.info("Autoscaling disabled");
             }
+            // Autoscaling aktiv
+            if (image.getWidth() > panelWidth || image.getHeight() > panelHeight && !imageForm.disableAutoscale) {
+                Dimension matrixDimension = new Dimension(imageForm.scale[0], imageForm.scale[1]);
+                image = imageTransformation.getScaledImage(image, matrixDimension);
+                LOGGER.error("Image is to big to be displayed on the " + panelWidth + "x" + panelHeight + " matrix");
+                LOGGER.error("Autoscaling image down to: " + panelWidth + "x" + panelHeight);
+            }
+            // Die Grösse der Matrix
+            if (panelHeight != 16 && panelWidth != 16) {
+                LOGGER.info("LED matrix size set to " + Arrays.toString(imageForm.matrix));
+            }
+
+            // Die Helligkeit der LEDs
+            if (imageForm.brightness == null) {
+                imageForm.brightness = 0.1d;
+            }
+
+            LOGGER.info("LED brightness level " + imageForm.brightness);
+            String grbString = imageToRGB.imageToString(image, imageForm.brightness, panelWidth, panelHeight);
+            // Das Bild wird auf den seriellen Port geschrieben
+            port = comPort.open(CustomComPort);
+            stream = port.getOutputStream();
+            comPort.write(stream, grbString.getBytes());
+            stream.close();
+            comPort.close(port);
+
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IOException WriteException) {
             LOGGER.error("Write Error " + WriteException.getMessage());
