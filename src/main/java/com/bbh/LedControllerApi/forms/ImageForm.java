@@ -3,7 +3,6 @@ package com.bbh.LedControllerApi.forms;
 import org.springframework.stereotype.Component;
 @Component
 public class ImageForm {
-    public String comport;
     public boolean reset;
     public String inputFile;
     public Double brightness;
