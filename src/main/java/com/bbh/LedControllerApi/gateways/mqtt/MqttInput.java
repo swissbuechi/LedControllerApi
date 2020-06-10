@@ -43,7 +43,7 @@ public class MqttInput {
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(0);
         adapter.setOutputChannel(mqttInputChannel());
-        LOGGER.info("Connected to MQTT Broker: " + server + ":" + port);
+        LOGGER.info("Connecting to MQTT Broker: " + server + ":" + port);
         LOGGER.info("Subscribed for topic: " + topic);
         return adapter;
     }
