@@ -4,4 +4,3 @@ ADD src/main/resources/docker_application.properties docker_application.properti
 ADD src/main/resources/docker_application.properties application.properties
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "LedControllerApi.jar" , "--spring.config.location=docker_application.properties"]
-#ENTRYPOINT ["java", "-jar", "LedControllerApi.jar" , "--spring.config.location=application.properties"]
