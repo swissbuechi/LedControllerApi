@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  ledcontroller:
+    image: swissbuechi/ledcontrollerapi:latest
+    container_name: ledcontrollerapi01
+    networks:
+      - tictactoe
+    devices:
+      - "/dev/ttyS0:/dev/ttyS0"
+networks:
+  tictactoe:
