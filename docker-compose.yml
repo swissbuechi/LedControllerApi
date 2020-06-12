@@ -1,8 +1,10 @@
 version: '3.8'
 services:
-  ledcontroller:
+  ledcontrollerapi:
     image: swissbuechi/ledcontrollerapi:latest
-    container_name: ledcontrollerapi01
+    container_name: ledcontrollerapi
+    ports:
+      - 8080:8080
     networks:
       - tictactoe
     devices:
