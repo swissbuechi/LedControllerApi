@@ -28,13 +28,17 @@ public class TicMessageHandler {
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
             TicEvent ticEvent = gson.fromJson((String) message.getPayload(), TicEvent.class);
 
-            if (ticEvent.getMqttClientId().equals("TicTacToeControllerApi")) {
+            if (ticEvent.getMqttClientId().equals("TttControllerApi")) {
                 LOGGER.info("New Message recived topic: " + topic + ": " + message.getPayload().toString()
                         .replace("\r", "").replace("\n", ""));
                 ticService.handleTurn(ticEvent);
             }
-        } catch (JsonSyntaxException | NullPointerException e) {
+        } catch (JsonSyntaxException e) {
             LOGGER.error("New Message recived topic: " + topic + ": Maleformed JSON: " + message.getPayload().toString()
+                    .replace("\r", "").replace("\n", ""));
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            LOGGER.error("New Message recived topic: " + topic + ": Nullpointer Exception in JSON: " + message.getPayload().toString()
                     .replace("\r", "").replace("\n", ""));
         }
     }
