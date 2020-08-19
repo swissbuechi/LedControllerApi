@@ -60,6 +60,9 @@ public class ImageController {
             }
             // Das Bild wird eingelesen
             BufferedImage image = imageInput.getImage(imageForm.inputFile);
+            if (image == null) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
             int panelWidth = imageForm.matrix[0];
             int panelHeight = imageForm.matrix[1];
 
