@@ -1,7 +1,7 @@
 package com.bbh.LedControllerApi.gateways.mqtt;
 
 import com.bbh.LedControllerApi.forms.TicEvent;
-import com.bbh.LedControllerApi.services.ticTacToeService.TicService;
+import com.bbh.LedControllerApi.services.TttService.TicService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
