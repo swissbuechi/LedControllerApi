@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @Component
 public class ImageToRGB {
-    private ImageTransformation imageTransformation = new ImageTransformation();
+    private final ImageTransformation imageTransformation = new ImageTransformation();
 
     /**
      * <p>Liest das Bild Zeile für Zeile. Das Lesen passiert in einer "Snakeline", was bedeutet, dass man die erste Zeile
@@ -156,7 +156,7 @@ public class ImageToRGB {
     }
 
     public String buildGrbString(Color c) {
-        double brightness = 0.01d;
+        double brightness = 0.1d;
         return toFormatedHex(adjustBrightness(c.getGreen(), brightness), true)
                 + toFormatedHex(adjustBrightness(c.getRed(), brightness), true)
                 + toFormatedHex(adjustBrightness(c.getBlue(), brightness), true);
