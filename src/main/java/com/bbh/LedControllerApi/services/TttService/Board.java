@@ -1,4 +1,4 @@
-package com.bbh.LedControllerApi.services.TttService;
+package com.bbh.LedControllerApi.services.tttService;
 
 import com.bbh.LedControllerApi.services.imageService.ImageToRGB;
 import com.bbh.LedControllerApi.services.imageService.MatrixBuilder;

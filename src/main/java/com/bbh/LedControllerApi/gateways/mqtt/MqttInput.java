@@ -24,7 +24,7 @@ public class MqttInput {
     private static final Logger LOGGER = LogManager.getLogger(com.bbh.LedControllerApi.gateways.mqtt.MqttInput.class);
 
     @Autowired
-    TicMessageHandler messageHandler;
+    BreakoutMessageHandler messageHandler;
     @Value("${mqttserver}")
     private String server;
     @Value("${mqttport}")

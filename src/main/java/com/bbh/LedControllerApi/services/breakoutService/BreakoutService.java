@@ -1,9 +1,10 @@
-package com.bbh.LedControllerApi.services.tttService;
+package com.bbh.LedControllerApi.services.breakoutService;
 
-import com.bbh.LedControllerApi.forms.TicEvent;
+import com.bbh.LedControllerApi.forms.BreakoutEvent;
 import com.bbh.LedControllerApi.gateways.serial.ComPort;
 import com.bbh.LedControllerApi.services.imageService.ImageToRGB;
 import com.bbh.LedControllerApi.services.imageService.MatrixBuilder;
+import com.bbh.LedControllerApi.services.tttService.Board;
 import com.fazecast.jSerialComm.SerialPort;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,9 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TicService {
+public class BreakoutService {
 
-    private static final Logger LOGGER = LogManager.getLogger(TicService.class);
+    private static final Logger LOGGER = LogManager.getLogger(BreakoutService.class);
 
     // Kein Autowired hier, wird über SetterMethoden ganz unten gemacht. https://www.baeldung.com/spring-autowire
     // Alternative wäre über Constructor, aber mit 4 Parametern ists etwas lang.
@@ -27,13 +28,9 @@ public class TicService {
     @Value("${comport}")
     private String CustomComPort;
 
-    public void handleTurn(TicEvent ticEvent) {
-        if (ticEvent.isReset()) {
+    public void handleTurn(BreakoutEvent breakoutEvent) {
+        if (breakoutEvent.isReset()) {
             sendToPort(matrixBuilder.initializeArray());
-        } else if (ticEvent.isStart()) {
-            sendToPort(playground.getGrid());
-        } else if (ticEvent.getPositions() != null) {
-            sendToPort(playground.turn(ticEvent.getPositions()));
         }
     }
 
@@ -66,4 +63,5 @@ public class TicService {
     public void setImageToRGB(ImageToRGB imageToRGB) {
         this.imageToRGB = imageToRGB;
     }
+
 }
