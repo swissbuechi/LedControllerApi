@@ -1,6 +1,7 @@
 package com.bbh.LedControllerApi.gateways.mqtt;
 
-import com.bbh.LedControllerApi.forms.TicEvent;
+import com.bbh.LedControllerApi.forms.BreakoutEvent;
+import com.bbh.LedControllerApi.services.breakoutService.BreakoutService;
 import com.bbh.LedControllerApi.services.tttService.TicService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,19 +21,25 @@ public class TicMessageHandler {
     @Autowired
     TicService ticService;
 
+    @Autowired
+    BreakoutService breakoutService;
+
     @Value("${mqtttopic}")
     private String topic;
 
     public void receiveMessage(Message<?> message) {
         try {
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-            TicEvent ticEvent = gson.fromJson((String) message.getPayload(), TicEvent.class);
+//            TicEvent ticEvent = gson.fromJson((String) message.getPayload(), TicEvent.class);
+//
+//            if (ticEvent.getMqttClientId().equals("TttControllerApi")) {
+//                LOGGER.info("New Message recived topic: " + topic + ": " + message.getPayload().toString()
+//                        .replace("\r", "").replace("\n", ""));
+//                ticService.handleTurn(ticEvent);
+//            }
 
-            if (ticEvent.getMqttClientId().equals("TttControllerApi")) {
-                LOGGER.info("New Message recived topic: " + topic + ": " + message.getPayload().toString()
-                        .replace("\r", "").replace("\n", ""));
-                ticService.handleTurn(ticEvent);
-            }
+            breakoutService.handleTurn(gson.fromJson((String) message.getPayload(), BreakoutEvent.class));
+
         } catch (JsonSyntaxException e) {
             LOGGER.error("New Message recived topic: " + topic + ": Maleformed JSON: " + message.getPayload().toString()
                     .replace("\r", "").replace("\n", ""));

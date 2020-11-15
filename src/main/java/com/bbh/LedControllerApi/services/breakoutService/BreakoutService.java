@@ -31,6 +31,10 @@ public class BreakoutService {
     public void handleTurn(BreakoutEvent breakoutEvent) {
         if (breakoutEvent.isReset()) {
             sendToPort(matrixBuilder.initializeArray());
+            return;
+        }
+        if (breakoutEvent.getRgb() != null) {
+            sendToPort(breakoutEvent.getRgb());
         }
     }
 
