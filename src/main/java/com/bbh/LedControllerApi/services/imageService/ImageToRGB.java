@@ -14,7 +14,7 @@ public class ImageToRGB {
     private final ImageTransformation imageTransformation = new ImageTransformation();
 
 
-    public String RgbArrayToString(String[][] image, double brightness) {
+    public String RgbArrayToString(String[][] image) {
         ArrayList<String> output = new ArrayList<>();
         int lineNumber = 1;
         for (int row = 0; row < image.length; row++) {
@@ -31,7 +31,7 @@ public class ImageToRGB {
                 }
 
                 // Baut den GRB bzw. RGB String pro Zeile. Wird jeweils von links her aufgebaut
-                grbLine += buildGrbString(new Color(Integer.parseInt(image[row][column].replaceAll("\\D+", ""))), brightness);
+                grbLine += image[row][column];
 
                 // Snakeline Reset. Lesen der Zeile beenden, wenn Anfang oder Ende erreicht.
                 if ((row % 2 == 0 && image.length - 1 <= column) || (row % 2 != 0 && column <= 0))
@@ -46,7 +46,7 @@ public class ImageToRGB {
             // Zeilennummer im Hex-Format (klein), danach kommt die GRB Zeile und der Abschluss ">".
             output.add("<" + toFormatedHex(lineNumber++, false) + grbLine + ">");
         }
-        return output.toString();
+        return output.toString().replace("#", "");
     }
 
     //buildGrbString(new Color(image.getRGB(column, row)), brightness);
