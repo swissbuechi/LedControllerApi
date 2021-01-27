@@ -31,7 +31,7 @@ public class ImageToRGB {
                 }
 
                 // Baut den GRB bzw. RGB String pro Zeile. Wird jeweils von links her aufgebaut
-                grbLine += buildGrbString(new Color(Integer.parseInt(image[row][column])), brightness);
+                grbLine += buildGrbString(new Color(Integer.parseInt(image[row][column].replaceAll("\\D+", ""))), brightness);
 
                 // Snakeline Reset. Lesen der Zeile beenden, wenn Anfang oder Ende erreicht.
                 if ((row % 2 == 0 && image.length - 1 <= column) || (row % 2 != 0 && column <= 0))
