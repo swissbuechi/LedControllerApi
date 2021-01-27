@@ -35,8 +35,6 @@ public class BreakoutService {
         }
         if (breakoutEvent.getRgb() != null) {
 
-            //Handle Snake Line handle rgb grb
-
             sendToPort(breakoutEvent.getRgb());
         }
     }
@@ -44,10 +42,11 @@ public class BreakoutService {
     private void sendToPort(String[][] stringArray) {
         SerialPort port = comPort.open(CustomComPort);
         if (port != null) {
-            comPort.write(port.getOutputStream(), imageToRGB.RgbArrayToString(stringArray, 0.01).getBytes());
+            comPort.write(port.getOutputStream(), imageToRGB.GrbArrayToString(stringArray).getBytes());
             comPort.close(port);
         }
     }
+
 
     /* DipendencyInjection über setter Methoden */
 
