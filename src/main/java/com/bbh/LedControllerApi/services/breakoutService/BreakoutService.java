@@ -44,7 +44,7 @@ public class BreakoutService {
     private void sendToPort(String[][] stringArray) {
         SerialPort port = comPort.open(CustomComPort);
         if (port != null) {
-            comPort.write(port.getOutputStream(), imageToRGB.RgbArrayToString(stringArray, 0.1).getBytes());
+            comPort.write(port.getOutputStream(), imageToRGB.RgbArrayToString(stringArray, 0.01).getBytes());
             comPort.close(port);
         }
     }
