@@ -13,6 +13,45 @@ import java.util.ArrayList;
 public class ImageToRGB {
     private final ImageTransformation imageTransformation = new ImageTransformation();
 
+
+    public String RgbArrayToString(String[][] image, double brightness) {
+        ArrayList<String> output = new ArrayList<>();
+        int lineNumber = 1;
+        for (int row = 0; row < image.length; row++) {
+            boolean doRead = true;
+            String grbLine = "";
+            int halfLedLengthCounter = 0;
+            int column = getArrayStart(image.length, row);
+            do {
+                // Bei der Hälfte der Panellänge muss der String aufteteilt werden. Danach startet wieder ein neuer String.
+                // Wird gebraucht damit die Snakeline korrekt erzeugt wird
+                if (halfLedLengthCounter != 0 && halfLedLengthCounter % 8 == 0) {
+                    output.add("<" + toFormatedHex(lineNumber++, false) + grbLine + ">");
+                    grbLine = "";
+                }
+
+                // Baut den GRB bzw. RGB String pro Zeile. Wird jeweils von links her aufgebaut
+                grbLine += buildGrbString(new Color(Integer.parseInt(image[row][column])), brightness);
+
+                // Snakeline Reset. Lesen der Zeile beenden, wenn Anfang oder Ende erreicht.
+                if ((row % 2 == 0 && image.length - 1 <= column) || (row % 2 != 0 && column <= 0))
+                    doRead = false; // Springt aus der Do-While Schleife raus, wenn Kondition erfüllt
+
+                // Variable x (X-Achse) um 1 erhöhen oder reduzieren. --> Je nach Position der Snakeline
+                // ungerade Zeilen von rechts lesen, gerade von links
+                column = incrementOrDecrement(row, column);
+                halfLedLengthCounter++;
+            } while (doRead);
+            // Baut den GRB String und die benötigten Zusätze zusammen. Zeile startet immer mit "<" gefolgt von der
+            // Zeilennummer im Hex-Format (klein), danach kommt die GRB Zeile und der Abschluss ">".
+            output.add("<" + toFormatedHex(lineNumber++, false) + grbLine + ">");
+        }
+        return output.toString();
+    }
+
+    //buildGrbString(new Color(image.getRGB(column, row)), brightness);
+
+
     /**
      * <p>Liest das Bild Zeile für Zeile. Das Lesen passiert in einer "Snakeline", was bedeutet, dass man die erste Zeile
      * von links nach rechts liest und die darauffolgende von rechts nach links. Dies geschieht immer abwechslungsweise.
