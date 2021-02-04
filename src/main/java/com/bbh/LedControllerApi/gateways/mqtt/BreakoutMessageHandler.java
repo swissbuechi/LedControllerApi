@@ -29,7 +29,7 @@ public class BreakoutMessageHandler {
             BreakoutEvent breakoutEvent = gson.fromJson((String) message.getPayload(), BreakoutEvent.class);
             LOGGER.info("New Message recived topic: " + topic + ": " + message.getPayload().toString()
                     .replace("\r", "").replace("\n", ""));
-            breakoutService.handleTurn(breakoutEvent);
+            breakoutService.handleEvent(breakoutEvent);
         } catch (JsonSyntaxException e) {
             LOGGER.error("New Message recived topic: " + topic + ": Maleformed JSON: " + message.getPayload().toString()
                     .replace("\r", "").replace("\n", ""));
@@ -37,6 +37,7 @@ public class BreakoutMessageHandler {
         } catch (NullPointerException e) {
             LOGGER.error("New Message recived topic: " + topic + ": Nullpointer Exception in JSON: " + message.getPayload().toString()
                     .replace("\r", "").replace("\n", ""));
+            e.printStackTrace();
         }
     }
 }

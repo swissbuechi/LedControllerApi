@@ -31,7 +31,12 @@ public class ImageToRGB {
                 }
 
                 // Baut den GRB bzw. RGB String pro Zeile. Wird jeweils von links her aufgebaut
-                grbLine += image[row][column];
+                String ledHex = image[row][column];
+                if (ledHex == null) {
+                    ledHex = "#000000";
+                }
+                ledHex = buildGrbString(Color.decode(ledHex));
+                grbLine += ledHex;
 
                 // Snakeline Reset. Lesen der Zeile beenden, wenn Anfang oder Ende erreicht.
                 if ((row % 2 == 0 && image.length - 1 <= column) || (row % 2 != 0 && column <= 0))

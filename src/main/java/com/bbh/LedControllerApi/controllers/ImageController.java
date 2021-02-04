@@ -115,6 +115,7 @@ public class ImageController {
             // Das Bild wird auf den seriellen Port geschrieben
             port = comPort.open(CustomComPort);
             stream = port.getOutputStream();
+            System.out.println(grbString);
             comPort.write(stream, grbString.getBytes());
             stream.close();
             comPort.close(port);

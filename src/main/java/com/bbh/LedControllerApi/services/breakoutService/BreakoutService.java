@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Component
 public class BreakoutService {
 
@@ -28,7 +30,7 @@ public class BreakoutService {
     @Value("${comport}")
     private String CustomComPort;
 
-    public void handleTurn(BreakoutEvent breakoutEvent) {
+    public void handleEvent(BreakoutEvent breakoutEvent) {
         if (breakoutEvent.isReset()) {
             sendToPort(matrixBuilder.initializeArray());
             return;
@@ -36,6 +38,7 @@ public class BreakoutService {
         if (breakoutEvent.getRgb() != null) {
 
             sendToPort(breakoutEvent.getRgb());
+            System.out.println("1. Event RGB: \n" + Arrays.deepToString(breakoutEvent.getRgb()));
         }
     }
 
@@ -43,7 +46,7 @@ public class BreakoutService {
         SerialPort port = comPort.open(CustomComPort);
         //String output = imageToRGB.RgbArrayToString(stringArray, 0.01);
         String output = imageToRGB.RgbArrayToString(stringArray);
-        System.out.println(output);
+        System.out.println("2. Event RGB: \n" + output);
         if (port != null) {
             comPort.write(port.getOutputStream(), output.getBytes());
             comPort.close(port);
